@@ -8,6 +8,9 @@ export function bookEndList(numbers: number[]): number[] {
     if (numbers.length == 1) {
         return [numbers[0], numbers[0]];
     }
+    if (numbers.length == 0) {
+        return [];
+    }
     return [numbers[0], numbers[numbers.length - 1]];
 }
 
@@ -25,8 +28,8 @@ export function tripleNumbers(numbers: number[]): number[] {
  * the number cannot be parsed as an integer, convert it to 0 instead.
  */
 export function stringsToIntegers(numbers: string[]): number[] {
-    numbers = numbers.map((temp: string): temp => (temp = number));
-    return [];
+    const integers = numbers.map((num: string): number => parseInt(num) || 0);
+    return integers;
 }
 
 /**
@@ -37,7 +40,11 @@ export function stringsToIntegers(numbers: string[]): number[] {
  */
 // Remember, you can write functions as lambdas too! They work exactly the same.
 export const removeDollars = (amounts: string[]): number[] => {
-    return [];
+    const temp = amounts.map(
+        (num: string): number =>
+            parseInt(num.startsWith("$") ? num.slice(1) : num) || 0,
+    );
+    return temp;
 };
 
 /**
@@ -46,7 +53,12 @@ export const removeDollars = (amounts: string[]): number[] => {
  * in question marks ("?").
  */
 export const shoutIfExclaiming = (messages: string[]): string[] => {
-    return [];
+    const temp = messages.filter((mes: string): boolean => !mes.endsWith("?"));
+    const tempAgain = temp.map((mes: string): string =>
+        mes.endsWith("!") ? mes.toUpperCase() : mes,
+    );
+    // i need to thikn of better variable names clearly
+    return tempAgain;
 };
 
 /**
@@ -54,7 +66,8 @@ export const shoutIfExclaiming = (messages: string[]): string[] => {
  * 4 letters long.
  */
 export function countShortWords(words: string[]): number {
-    return 0;
+    const temp = words.filter((mes: string): boolean => mes.length < 4);
+    return temp.length;
 }
 
 /**
@@ -63,6 +76,13 @@ export function countShortWords(words: string[]): number {
  * then return true.
  */
 export function allRGB(colors: string[]): boolean {
+    const temp = colors.filter(
+        (mes: string): boolean =>
+            mes === "red" || mes === "blue" || mes === "green",
+    );
+    if (colors.length == temp.length) {
+        return true;
+    }
     return false;
 }
 
@@ -74,7 +94,15 @@ export function allRGB(colors: string[]): boolean {
  * And the array [] would become "0=0".
  */
 export function makeMath(addends: number[]): string {
-    return "";
+    const total = addends.reduce(
+        (currentTotal: number, num: number) => currentTotal + num,
+        0,
+    );
+    if (addends.length === 0) {
+        return "0=0";
+    }
+    const temp = `${total}=${addends.join("+")}`;
+    return temp;
 }
 
 /**
@@ -86,6 +114,33 @@ export function makeMath(addends: number[]): string {
  * For instance, the array [1, 9, -5, 7] would become [1, 9, -5, 10, 7]
  * And the array [1, 9, 7] would become [1, 9, 7, 17]
  */
+// Used Ai for the negatives part of the question
 export function injectPositive(values: number[]): number[] {
-    return [];
+    const result = [...values];
+
+    const negatives = result.filter((num: number): boolean => num < 0);
+
+    if (negatives.length > 0) {
+        const firstNegative = negatives[0];
+        const index = result.indexOf(firstNegative);
+
+        const sumBefore = result
+            .slice(0, index)
+            .reduce(
+                (currentTotal: number, num: number) => currentTotal + num,
+                0,
+            );
+
+        result.splice(index + 1, 0, sumBefore);
+        return result;
+    }
+
+    // No negatives → append total sum
+    const total = result.reduce(
+        (currentTotal: number, num: number) => currentTotal + num,
+        0,
+    );
+
+    result.splice(result.length, 0, total);
+    return result;
 }
